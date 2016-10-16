@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
@@ -25,18 +26,48 @@ public class SessionDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (BoopService.timingState == BoopService.TIMING_PAUSED) {
+                    fab.setImageDrawable(getDrawable(R.drawable.ic_stop));
+                    BoopService.stopTiming(getApplicationContext());
+                    Snackbar.make(view, "Stopping timing activity", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    //fab.setEnabled(false);
+                }
+                return true;
+            }
+        });
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                if (BoopService.timingState == BoopService.TIMING_HAPPENING) {
+                    BoopService.pauseTiming(getApplicationContext());
+                    //fab.setImageDrawable(getResources().getDrawable(R.id.fab, getTheme())."@android:drawable/ic_");
+                    Snackbar.make(view, "Pausing timing activity", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    fab.setImageDrawable(getDrawable(android.R.drawable.ic_media_play));
+                } else if ((BoopService.timingState == BoopService.TIMING_PAUSED) ||
+                        (BoopService.timingState == BoopService.TIMING_STOPPED)) {
+                    BoopService.startTiming(getApplicationContext());
+                    Snackbar.make(view, "Starting timing activity", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    fab.setImageDrawable(getDrawable(android.R.drawable.ic_media_pause));
+                }
             }
         });
 
+
+
+
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
+        if (actionBar != null)
+
+        {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -49,7 +80,9 @@ public class SessionDetailActivity extends AppCompatActivity {
         //
         // http://developer.android.com/guide/components/fragments.html
         //
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null)
+
+        {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
@@ -61,6 +94,7 @@ public class SessionDetailActivity extends AppCompatActivity {
                     .add(R.id.session_detail_container, fragment)
                     .commit();
         }
+
     }
 
     @Override

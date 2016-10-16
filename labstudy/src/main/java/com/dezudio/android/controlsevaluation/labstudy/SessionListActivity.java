@@ -1,22 +1,24 @@
 package com.dezudio.android.controlsevaluation.labstudy;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
-
-import com.dezudio.android.controlsevaluation.labstudy.dummy.DummyContent;
 
 import java.util.List;
 
@@ -37,6 +39,42 @@ public class SessionListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    private SessionContent datasource;
+    private static final String TAG = "SessionList";
+
+    private void addSession() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Session Title");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String sessionTitle = input.getText().toString();
+                if (sessionTitle.equals("")) {
+                    Log.d(TAG, "Session title cannot be empty");
+                } else {
+                    datasource.addItem(getApplicationContext(), new SessionContent.SessionItem(
+                            ((Integer) datasource.ITEMS.size()).toString(), sessionTitle));
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +85,12 @@ public class SessionListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        datasource = new SessionContent(this);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_session);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+            public void onClick(View view) { addSession(); }
         });
 
         View recyclerView = findViewById(R.id.session_list);
@@ -70,15 +107,15 @@ public class SessionListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(SessionContent.ITEMS));
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<SessionContent.SessionItem> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<SessionContent.SessionItem> items) {
             mValues = items;
         }
 
@@ -126,7 +163,7 @@ public class SessionListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public SessionContent.SessionItem mItem;
 
             public ViewHolder(View view) {
                 super(view);
