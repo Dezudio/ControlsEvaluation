@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">_Vision Study</string>
+
+    <string name="action_record">Record Activity</string>
+    <string name="action_recording">Recording...</string>
+    <string name="activity_recorded">Activity recorded</string>
+    <string name="activity_cancelled">Activity cancelled</string>
+</resources>

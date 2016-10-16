@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/ControlsEvaluation.iml" filepath="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/ControlsEvaluation.iml" />
+      <module fileurl="file://$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/buttoncontrolmobile/buttoncontrolmobile.iml" filepath="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/buttoncontrolmobile/buttoncontrolmobile.iml" />
+      <module fileurl="file://$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/homestudy/homestudy.iml" filepath="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/homestudy/homestudy.iml" />
+      <module fileurl="file://$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/labstudy/labstudy.iml" filepath="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/labstudy/labstudy.iml" />
+      <module fileurl="file://$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/watchcontrolmobile/watchcontrolmobile.iml" filepath="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/watchcontrolmobile/watchcontrolmobile.iml" />
+      <module fileurl="file://$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/watchcontrolwear/watchcontrolwear.iml" filepath="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/watchcontrolwear/watchcontrolwear.iml" />
+    </modules>
+  </component>
+</project>

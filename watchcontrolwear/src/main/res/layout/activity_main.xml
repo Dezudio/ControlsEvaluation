@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/topFrameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light">
+
+    <TextView
+        android:id="@+id/action_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="30dp"
+        android:text="@string/action_record"
+        android:textColor="@color/primary_text_light"
+        android:textSize="24sp" />
+
+    <android.support.wearable.view.DelayedConfirmationView
+        android:id="@+id/delayed_confirmation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_cancel"
+        app:circle_border_color="@color/color_light"
+        app:circle_border_width="@dimen/circle_border_normal_width"
+        app:circle_color="@color/color_primary"
+        app:circle_padding="@dimen/circle_padding"
+        app:circle_radius="@dimen/circle_radius"
+        app:circle_radius_pressed="@dimen/circle_radius_pressed" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="30dp"
+        android:text="@string/action_recording"
+        android:textColor="@color/secondary_text_light"
+        android:textSize="24sp" />
+
+</FrameLayout>
+
+
+
