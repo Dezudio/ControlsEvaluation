@@ -29,7 +29,7 @@ public class BoopService extends IntentService {
     private static final String ACTION_PAUSE = "com.dezudio.android.controlsevaluation.labstudy.action.STOP_TIMINGS";
     private static final String ACTION_STOP = "com.dezudio.android.controlsevaluation.labstudy.action.STOP_TIMINGS";
 
-    private static int[] timings = {90, 53, 50, 85, 30, 24, 68, 43, 67, 84, 87, 83, 21, 62, 41, 38, 98, 20, 65, 35, 49, 62, 75, 25, 45, 66, 66, 33, 106, 51, 84, 176, 87, 79, 51, 45, 59, 41, 19, 15};
+    private static int[] timings = {61, 29, 45, 20, 31, 54, 38, 24, 30, 68, 43, 21, 17, 29, 15, 25, 44, 87, 48, 35, 21, 62, 41, 38, 22, 25, 22, 29, 20, 15, 50, 35, 16, 20, 15, 36, 24, 46, 19, 22, 58, 66, 32, 34, 33, 65, 41, 51, 84, 27, 45, 26, 34, 44, 15, 48, 33, 44, 26, 51, 45, 59, 34, 43};
 
     public MediaPlayer mp;
 
