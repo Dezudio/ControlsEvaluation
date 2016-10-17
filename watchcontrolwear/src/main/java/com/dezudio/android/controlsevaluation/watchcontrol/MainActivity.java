@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements
     private Vibrator vibrator;
 
     // start delay, length on, length off, ...
-    private long[] initialVibrationPattern = {0, 500};
+    private long[] initialVibrationPattern = {0, 300};
     private long[] cancelledVibrationPattern = {0, 300, 50, 300, 50, 300};
     private long[] confirmedVibrationPattern = {0, 700};
 
