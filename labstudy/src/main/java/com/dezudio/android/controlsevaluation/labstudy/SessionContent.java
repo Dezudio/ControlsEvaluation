@@ -23,8 +23,8 @@ public class SessionContent {
     // User session details
     public static Map<String, SessionContent.SessionItem> ITEM_MAP = new HashMap<>();
 
-    private static final String SESSIONS_FILENAME = "sessions.txt";
-    private static final String TIMINGS_FILENAME = "timings.txt";
+    private static final String SESSIONS_FILENAME = "sessions2.txt";
+    private static final String TIMINGS_FILENAME = "timings2.txt";
 
     public SessionContent(Context context) {
         readFromInternalStorage(context);
