@@ -53,7 +53,7 @@ public class MainActivity extends Activity implements
 
 
     /* Delay duration before recording activity */
-    private static final int NUM_SECONDS = 3;
+    private static final int NUM_SECONDS = 1;
 
 
     /* Communication to Mobile app */
