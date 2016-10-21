@@ -35,8 +35,10 @@ public class ListenerService extends WearableListenerService implements
             "com.dezudio.android.controlsevaluation.activity.timestamp_cancelled";
 
     /* Communication to Home app's Activity Recording Service */
-    private static final String HOME_APP_PACKAGE = "com.dezudio.android.controlsevaluation.labstudy";
+    private static final String HOME_APP_PACKAGE = "com.dezudio.android.controlsevaluation.homestudy";
+    private static final String LAB_APP_PACKAGE = "com.dezudio.android.controlsevaluation.labstudy";
     private static final String HOME_APP_SERVICE = HOME_APP_PACKAGE + ".RecordService";
+    private static final String LAB_APP_SERVICE = LAB_APP_PACKAGE + ".RecordService";
     private static final String RECORD_ACTION = "com.dezudio.android.controlsevaluation.action.RECORD";
 
 
@@ -94,6 +96,9 @@ public class ListenerService extends WearableListenerService implements
                 i.putExtra(TIMESTAMP_KEY, dataMap.getString(TIMESTAMP_KEY));
                 i.putExtra(TIMESTAMP_WAS_CANCELLED_KEY,
                         dataMap.getBoolean(TIMESTAMP_WAS_CANCELLED_KEY));
+                startService(i);
+
+                i.setClassName(LAB_APP_PACKAGE, LAB_APP_SERVICE);
                 startService(i);
 
                 // Remove item after processing
