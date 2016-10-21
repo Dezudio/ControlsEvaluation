@@ -1,3 +1,32 @@
 <resources>
+
+    <!-- Generics -->
     <string name="app_name">Home Study</string>
+    <string name="service_label">Controls Home Study</string>
+
+    <string name="start_button">Begin</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Study Session -->
+    <string name="start_instructions">Each session lasts 12 hours and cannot be paused.</string>
+    <string name="start_daily">Begin Session</string>
+    <string name="start_confirmation_instructions">Begin session?</string>
+
+    <!-- Power Hour -->
+    <string name="power_start_instructions">This is gonna buzz you. Like, a lot.</string>
+    <string name="power_start_daily">Begin Power Half Hour</string>
+    <string name="power_start_confirmation_instructions">Begin Power Half Hour?</string>
+
+    <!-- Preference keys and defaults -->
+    <string name="preference_file_key">
+        com.dezudio.android.controlsevaluation.homestudy.PREFERENCE_FILE_KEY
+    </string>
+
+    <string name="study_mode">study_mode</string>
+    <string name="study_mode_default">inactive</string>
+    <string name="study_start_time">study_start_time</string>
+
+    <string name="power_mode">power_mode</string>
+    <string name="power_mode_default">inactive</string>
+    <string name="power_start_time">power_start_time</string>
 </resources>

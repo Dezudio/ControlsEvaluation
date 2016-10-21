@@ -6,9 +6,45 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:persistent="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.dezudio.android.controlsevaluation.homestudy.START" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.dezudio.android.controlsevaluation.homestudy.RECORD" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".TimerService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver android:name=".AlarmReceiver" />
+
+        <service android:name=".RecordService">
+
+            <!--
+            exported or an appropriate intent filter?!
+            android:exported="true">
+            -->
+            <intent-filter>
+                <action android:name="com.dezudio.android.controlsevaluation.action.RecordService" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
