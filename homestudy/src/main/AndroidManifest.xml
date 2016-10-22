@@ -20,6 +20,13 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="com.dezudio.android.controlsevaluation.homestudy.START_POWER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="com.dezudio.android.controlsevaluation.homestudy.RECORD" />
 
@@ -27,11 +34,7 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".TimerService"
-            android:enabled="true"
-            android:exported="false" />
-
+        <receiver android:name=".PowerHourReceiver" />
         <receiver android:name=".AlarmReceiver" />
 
         <service android:name=".RecordService">

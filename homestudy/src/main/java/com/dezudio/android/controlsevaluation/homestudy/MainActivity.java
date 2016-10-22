@@ -13,8 +13,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "HomeStudy";
     private static final String START_INTENT =
             "com.dezudio.android.controlsevaluation.homestudy.START";
+
+    private static final String START_POWER_INTENT =
+            "com.dezudio.android.controlsevaluation.homestudy.START_POWER";
 
     private static final String RECORD_INTENT =
             "com.dezudio.android.controlsevaluation.homestudy.RECORD";
@@ -40,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
         final long startTime = sharedPref.getLong(getString(R.string.study_start_time),0);
 
         if (!studyMode.equals(studyModeDefault)) {
-            long timerMillis = 12*60*60*1000 - (System.currentTimeMillis()-startTime);
-            if(timerMillis > 0) {
+            long timerMillis = 12 * 60 * 60 * 1000 - (System.currentTimeMillis() - startTime);
+            if (timerMillis > 0) {
                 timer = new CountDownTimer(timerMillis, 1000 * 60) {
 
                     // Update the text view once/minute
@@ -59,11 +64,43 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }.start(); // start the session countdown timer
-            }
-            else {
-                Log.d(TAG,"Come back tomorrow");
+            } else {
+                Log.d(TAG, "Come back tomorrow");
             }
         }
+
+        String powerModeDefault = getString(R.string.power_mode_default);
+        String powerMode = sharedPref.getString(getString(R.string.power_mode),powerModeDefault);
+        final long powerStartTime = sharedPref.getLong(getString(R.string.power_start_time),0);
+
+        if (!powerMode.equals(powerModeDefault)) {
+            long timerMillisPower = 30 * 60 * 1000 - (System.currentTimeMillis() - powerStartTime);
+            if (timerMillisPower > 0) {
+                timer = new CountDownTimer(timerMillisPower, 1000 * 60) {
+
+                    // Update the text view once/minute
+                    public void onTick(long millisUntilFinished) {
+                        TextView mTextField = (TextView) findViewById(R.id.power_hour_countdown);
+                        if (mTextField != null) {
+                            mTextField.setText(millisUntilFinished / 1000 / 60 + " min");
+                        }
+                    }
+
+                    // Display a message when there is no time remaining
+                    public void onFinish() {
+                        TextView mTextField = (TextView) findViewById(R.id.power_hour_countdown);
+                        mTextField.setText("Powered!");
+                    }
+
+                }.start(); // start the session countdown timer
+            }
+        }
+        else {
+            Log.d(TAG, "Power half hour is over");
+        }
+
+
+
     }
 
     @Override
@@ -80,6 +117,14 @@ public class MainActivity extends AppCompatActivity {
         if (START_INTENT.equals(action)) {
             setContentView(R.layout.activity_study);
             handleStart(intent);
+        }
+
+        else if (START_POWER_INTENT.equals(action)) {
+            setContentView(R.layout.activity_study);
+            handlePowerStart(intent);
+            adapter=new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1,
+                    com.dezudio.android.controlsevaluation.homestudy.RecordService.timeList);
         }
 
         else if(RECORD_INTENT.equals(action)) {
@@ -133,6 +178,23 @@ public class MainActivity extends AppCompatActivity {
                 SystemClock.elapsedRealtime() +
                         1 * 1000, alarmIntent);
 
+    }
+
+    public void handlePowerStart(Intent intent) {
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.power_mode), "active");
+        editor.putLong(getString(R.string.power_start_time),System.currentTimeMillis());
+        editor.apply();
+
+        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent i2 = new Intent(this,PowerHourReceiver.class);
+
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this,0,i2,0);
+
+        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() +
+                        10 * 1000, alarmIntent);
     }
 
     @Override

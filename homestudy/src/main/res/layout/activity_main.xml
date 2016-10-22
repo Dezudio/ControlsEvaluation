@@ -28,10 +28,5 @@
         android:layout_marginBottom="39dp"
         android:id="@+id/textView"
         android:textAppearance="@android:style/TextAppearance.Material.Title" />
-    <ListView
-        android:id="@+id/list2"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:drawSelectorOnTop="false"
-        android:layout_below="@+id/textView" />
+
 </RelativeLayout>
