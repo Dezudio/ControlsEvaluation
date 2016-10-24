@@ -9,6 +9,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -39,6 +40,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public static final long[] powerHourAlertList = {15, 15}; // List of alert intervals (seconds)
 
     public static PendingIntent pendingAlarmIntent;
+    public static Vibrator v;
     public static Ringtone r;
     private SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -127,6 +129,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (r != null) {
             r.stop();
+        }
+        if( v!= null){
+            v.cancel();
         }
     }
 
@@ -229,6 +234,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Vibrate
+        v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = { 0, 400, 200, 400, 200, 400, 200, 400 };
+        v.vibrate(pattern, -1);
     }
 
     /**
