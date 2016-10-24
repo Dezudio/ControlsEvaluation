@@ -228,7 +228,7 @@ public class AlarmReceiver extends BroadcastReceiver {
      */
     private void soundAlarm(Context context) {
         try {
-            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
             r = RingtoneManager.getRingtone(context, notification);
             r.play();
         } catch (Exception e) {
