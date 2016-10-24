@@ -36,8 +36,13 @@ public class AlarmReceiver extends BroadcastReceiver {
     private static final String SECOND_RESET_KEY =
             "com.dezudio.android.controlsevaluation.key.second_reset";
 
-    public static final long[] alertList = {1}; // List of alert intervals (minutes)
-    public static final long[] powerHourAlertList = {15, 15}; // List of alert intervals (seconds)
+    public static final long[] alertList =
+            {1, 1, 2, 1, 13, 17, 29, 17, 15, 8, 13, 28, 30, 9, 30,
+                    36, 22, 13, 19, 25, 44, 4, 19, 22, 5, 16, 6, 26,
+                    18, 4, 15, 8, 14, 28, 34, 39, 22, 6, 15}; // List of alert intervals (minutes)
+    public static final long[] powerHourAlertList =
+            {16, 83, 161, 25, 54, 106, 127, 12, 92, 162, 102, 14, 17,
+                    53, 99, 145, 117, 20, 143, 252 }; // List of alert intervals (seconds)
 
     public static PendingIntent pendingAlarmIntent;
     public static Vibrator v;
