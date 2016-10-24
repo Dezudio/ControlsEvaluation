@@ -1,1 +1,1 @@
-include ':homestudy', ':watchcontrolwear', ':watchcontrolmobile', ':buttoncontrolmobile', ':labstudy'
+include ':homestudy', ':watchcontrolwear', ':watchcontrolmobile', ':buttoncontrolmobile', ':labstudy', ':studylib'

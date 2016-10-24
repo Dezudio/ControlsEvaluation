@@ -1,11 +1,10 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
 
     defaultConfig {
-        applicationId "com.dezudio.android.controlsevaluation.homestudy"
         minSdkVersion 23
         targetSdkVersion 24
         versionCode 1
@@ -23,7 +22,6 @@ android {
 }
 
 dependencies {
-    compile project(":studylib")
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

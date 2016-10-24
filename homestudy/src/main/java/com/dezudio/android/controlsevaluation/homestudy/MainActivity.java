@@ -1,13 +1,10 @@
 package com.dezudio.android.controlsevaluation.homestudy;
 
-import android.app.AlarmManager;
 import android.app.DialogFragment;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,22 +13,26 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeStudy";
-    private static final String START_INTENT =
-            "com.dezudio.android.controlsevaluation.homestudy.START";
 
-    private static final String START_POWER_INTENT =
-            "com.dezudio.android.controlsevaluation.homestudy.START_POWER";
+    public static final String START_SESSION_ACTION =
+            "com.dezudio.android.controlsevaluation.action.START_SESSION";
 
-    private static final String RECORD_INTENT =
-            "com.dezudio.android.controlsevaluation.homestudy.RECORD";
+    public static final String UPDATE_ACTION =
+            "com.dezudio.android.controlsevaluation.action.UPDATE_LIST";
+
+    public static final String ENTER_POWER_HOUR_ACTION =
+            "com.dezudio.android.controlsevaluation.action.ENTER_POWER_HOUR";
+
+    public static final String NEW_SESSION_ACTION =
+            "com.dezudio.android.controlsevaluation.action.NEW_SESSION";
 
     private CountDownTimer timer;
+    private CountDownTimer powerTimer;
     private  ArrayAdapter<String> adapter;
 
     @Override
@@ -40,11 +41,15 @@ public class MainActivity extends AppCompatActivity {
 
         // During an active session, display a countdown When the layout is visible
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        String studyModeDefault = getResources().getString(R.string.study_mode_default);
-        String studyMode = sharedPref.getString(getString(R.string.study_mode), studyModeDefault);
+        String inactive = getResources().getString(R.string.mode_inactive);
+        String active = getResources().getString(R.string.mode_active);
+        String studyMode = sharedPref.getString(getString(R.string.study_mode), inactive);
+        String powerMode = sharedPref.getString(getString(R.string.power_mode), inactive);
         final long startTime = sharedPref.getLong(getString(R.string.study_start_time),0);
+        final long powerStartTime = sharedPref.getLong(getString(R.string.power_start_time),0);
 
-        if (!studyMode.equals(studyModeDefault)) {
+
+       if(studyMode.equals(active)) {
             long timerMillis = 12 * 60 * 60 * 1000 - (System.currentTimeMillis() - startTime);
             if (timerMillis > 0) {
                 timer = new CountDownTimer(timerMillis, 1000 * 60) {
@@ -53,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onTick(long millisUntilFinished) {
                         TextView mTextField = (TextView) findViewById(R.id.session_countdown);
                         if (mTextField != null) {
-                            mTextField.setText(millisUntilFinished / 1000 / 60 + " Minutes Remain");
+                            mTextField.setText("Session Active! " +
+                                    millisUntilFinished / 1000 / 60 + " min left");
                         }
                     }
 
@@ -64,25 +70,20 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }.start(); // start the session countdown timer
-            } else {
-                Log.d(TAG, "Come back tomorrow");
             }
         }
 
-        String powerModeDefault = getString(R.string.power_mode_default);
-        String powerMode = sharedPref.getString(getString(R.string.power_mode),powerModeDefault);
-        final long powerStartTime = sharedPref.getLong(getString(R.string.power_start_time),0);
-
-        if (!powerMode.equals(powerModeDefault)) {
+        if(powerMode.equals(active)) {
             long timerMillisPower = 30 * 60 * 1000 - (System.currentTimeMillis() - powerStartTime);
             if (timerMillisPower > 0) {
-                timer = new CountDownTimer(timerMillisPower, 1000 * 60) {
+                powerTimer = new CountDownTimer(timerMillisPower, 1000 * 60) {
 
                     // Update the text view once/minute
                     public void onTick(long millisUntilFinished) {
                         TextView mTextField = (TextView) findViewById(R.id.power_hour_countdown);
                         if (mTextField != null) {
-                            mTextField.setText(millisUntilFinished / 1000 / 60 + " min");
+                            mTextField.setText("Power 30! " +
+                                    millisUntilFinished / 1000 / 60 + " min left");
                         }
                     }
 
@@ -95,12 +96,6 @@ public class MainActivity extends AppCompatActivity {
                 }.start(); // start the session countdown timer
             }
         }
-        else {
-            Log.d(TAG, "Power half hour is over");
-        }
-
-
-
     }
 
     @Override
@@ -114,42 +109,126 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String action = intent.getAction();
 
-        if (START_INTENT.equals(action)) {
-            setContentView(R.layout.activity_study);
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        String inactive = getResources().getString(R.string.mode_inactive);
+        String sessionMode = sharedPref.getString(getString(R.string.study_mode), inactive);
+
+
+        if (START_SESSION_ACTION.equals(action)) {
             handleStart(intent);
         }
-
-        else if (START_POWER_INTENT.equals(action)) {
-            setContentView(R.layout.activity_study);
-            handlePowerStart(intent);
-            adapter=new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1,
-                    com.dezudio.android.controlsevaluation.homestudy.RecordService.timeList);
+        else if(UPDATE_ACTION.equals(action)) {
+            handleUpdate(intent, sharedPref);
         }
-
-        else if(RECORD_INTENT.equals(action)) {
-                   adapter=new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1,
-                    com.dezudio.android.controlsevaluation.homestudy.RecordService.timeList);
-
+        else if(ENTER_POWER_HOUR_ACTION.equals(action)){
+            handleEnterPowerHour(intent, sharedPref);
         }
-
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        String studyModeDefault = getResources().getString(R.string.study_mode_default);
-        String studyMode = sharedPref.getString(getString(R.string.study_mode), studyModeDefault);
-
-        if (studyMode.equals(studyModeDefault)) {
-            Log.d(TAG, "Study not in session");
+        else if(NEW_SESSION_ACTION.equals(action)){
+            handleRestart(intent, sharedPref);
+        }
+        // Not here because of an intent; just here because we're starting
+        else if(sessionMode.equals(inactive)){
             setContentView(R.layout.activity_main);
-        } else {
-            Log.d(TAG, "Study active");
-            setContentView(R.layout.activity_study);
-
-            ((ListView) findViewById(R.id.list)).setAdapter(adapter);
         }
-
     }
 
+    public void handleStart(Intent intent) {
+        Log.d(TAG, "Start Study Session");
+
+        setContentView(R.layout.activity_study);
+
+        // Update preferences w/ study mode and study mode start time
+        String active = getResources().getString(R.string.mode_active);
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.study_mode), active);
+        editor.putLong(getString(R.string.study_start_time),System.currentTimeMillis());
+        editor.apply();
+
+        // Set an initial alert to kickstart the rest; will not notify
+        long delayMins = AlarmReceiver.alertList[0];
+        boolean isPowerHour = false;
+        int alarmIndex = 0;
+        int powerHourAlarmIndex=0;
+        AlarmReceiver.setAlarm(this,delayMins*60,isPowerHour,powerHourAlarmIndex,alarmIndex);
+    }
+
+    private void handleUpdate(Intent intent, SharedPreferences sharedPref) {
+        String inactive = getResources().getString(R.string.mode_inactive);
+        String active = getResources().getString(R.string.mode_active);
+
+        String studyMode = sharedPref.getString(getString(R.string.study_mode), inactive);
+        String powerMode = sharedPref.getString(getString(R.string.power_mode), inactive);
+        if( studyMode.equals(active)) {
+            Log.d(TAG, "Update View");
+            adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_list_item_1,
+                    ControlsReceiver.invocations);
+            setContentView(R.layout.activity_study);
+            ((ListView) findViewById(R.id.list)).setAdapter(adapter);
+
+            if(powerMode.equals(active)) {
+                Button mButton = (Button) findViewById(R.id.power_hour_button);
+                mButton.setVisibility(Button.GONE);
+            }
+        }
+        else {
+            Log.d(TAG, "Control received out of session");
+            if(studyMode.equals(inactive)) {
+                setContentView(R.layout.activity_main);
+            }
+            else {
+                setContentView(R.layout.activity_done);
+            }
+        }
+    }
+
+    private void handleEnterPowerHour(Intent intent, SharedPreferences sharedPref){
+        Log.d(TAG,"Enter Power Hour");
+
+        String active = getResources().getString(R.string.mode_active);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.power_mode), active);
+        editor.putLong(getString(R.string.power_start_time),System.currentTimeMillis());
+        editor.apply();
+
+        handleUpdate(intent, sharedPref);
+    }
+
+    private void handleRestart(Intent intent, SharedPreferences sharedPref) {
+        Log.d(TAG, "Session Cleanup");
+        String inactive = getResources().getString(R.string.mode_inactive);
+        String active = getResources().getString(R.string.mode_active);
+        String cool_down = getResources().getString(R.string.mode_cool_down);
+        String studyMode = sharedPref.getString(getString(R.string.study_mode),active);
+        // First time around, cool_down will be set; second time around, fully reset for new session
+        if(studyMode.equals(cool_down)) {
+            setContentView(R.layout.activity_main);
+
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.study_mode), inactive);
+            editor.putString(getString(R.string.power_mode), inactive);
+            editor.putLong(getString(R.string.power_start_time), 0);
+            editor.putLong(getString(R.string.study_start_time), 0);
+            editor.apply();
+        }
+        else {
+            setContentView(R.layout.activity_done);
+
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.study_mode), cool_down);
+            editor.apply();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // timer may not have been initialized yet
+        if( timer != null) {timer.cancel(); }
+        if( powerTimer != null) {powerTimer.cancel(); }
+    }
 
     public void showConfirmationDialog(View view) {
         DialogFragment dialog = new SessionStartDialogFragment();
@@ -159,50 +238,6 @@ public class MainActivity extends AppCompatActivity {
     public void beginPowerHour(View view){
         DialogFragment dialog = new PowerHourStartDialogFragment();
         dialog.show(getFragmentManager(),"MainActivity");
-    }
-    public void handleStart(Intent intent) {
-
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.study_mode), "active");
-        editor.putLong(getString(R.string.study_start_time),System.currentTimeMillis());
-        editor.apply();
-
-        // Set an initial alert to kickstart the rest; will not notify
-        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent i2 = new Intent(this,AlarmReceiver.class);
-
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(this,0,i2,0);
-
-        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() +
-                        1 * 1000, alarmIntent);
-
-    }
-
-    public void handlePowerStart(Intent intent) {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.power_mode), "active");
-        editor.putLong(getString(R.string.power_start_time),System.currentTimeMillis());
-        editor.apply();
-
-        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent i2 = new Intent(this,PowerHourReceiver.class);
-
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(this,0,i2,0);
-
-        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() +
-                        10 * 1000, alarmIntent);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // timer may not have been initialized yet
-        if( timer != null) {timer.cancel(); }
     }
 
 }

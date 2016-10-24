@@ -13,9 +13,9 @@
         <service
             android:name=".RecordService"
             android:exported="true">
-            <intent-filter>
+ <!--           <intent-filter>
                 <action android:name="com.dezudio.android.vision_study.home.RecordService" />
-            </intent-filter>
+            </intent-filter>-->
         </service>
 
         <activity

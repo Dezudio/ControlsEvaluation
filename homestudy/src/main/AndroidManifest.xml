@@ -16,37 +16,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.dezudio.android.controlsevaluation.homestudy.START" />
+                <action android:name="com.dezudio.android.controlsevaluation.action.START_SESSION" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <intent-filter>
-                <action android:name="com.dezudio.android.controlsevaluation.homestudy.START_POWER" />
+                <action android:name="com.dezudio.android.controlsevaluation.action.UPDATE_LIST" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <intent-filter>
-                <action android:name="com.dezudio.android.controlsevaluation.homestudy.RECORD" />
+                <action android:name="com.dezudio.android.controlsevaluation.action.ENTER_POWER_HOUR" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="com.dezudio.android.controlsevaluation.action.NEW_SESSION"/>
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".PowerHourReceiver" />
-        <receiver android:name=".AlarmReceiver" />
+        <receiver
+            android:name=".ControlsReceiver"
 
-        <service android:name=".RecordService">
+            android:enabled="true"
+            android:exported="true" />
 
-            <!--
-            exported or an appropriate intent filter?!
-            android:exported="true">
-            -->
-            <intent-filter>
-                <action android:name="com.dezudio.android.controlsevaluation.action.RecordService" />
-            </intent-filter>
-        </service>
+        <receiver android:name=".AlarmReceiver"
+            android:exported="true"/>
 
     </application>
 

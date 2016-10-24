@@ -12,6 +12,7 @@
             <option value="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/buttoncontrolmobile" />
             <option value="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/homestudy" />
             <option value="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/labstudy" />
+            <option value="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/studylib" />
             <option value="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/watchcontrolmobile" />
             <option value="$USER_HOME$/work/dezudio/projects/vision-user-study/android/ControlsEvaluation/watchcontrolwear" />
           </set>

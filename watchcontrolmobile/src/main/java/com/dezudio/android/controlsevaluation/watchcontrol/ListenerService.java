@@ -1,5 +1,6 @@
 package com.dezudio.android.controlsevaluation.watchcontrol;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,9 +38,9 @@ public class ListenerService extends WearableListenerService implements
     /* Communication to Home app's Activity Recording Service */
     private static final String HOME_APP_PACKAGE = "com.dezudio.android.controlsevaluation.homestudy";
     private static final String LAB_APP_PACKAGE = "com.dezudio.android.controlsevaluation.labstudy";
-    private static final String HOME_APP_SERVICE = HOME_APP_PACKAGE + ".RecordService";
+    private static final String HOME_APP_SERVICE = HOME_APP_PACKAGE + ".ControlsReceiver";
     private static final String LAB_APP_SERVICE = LAB_APP_PACKAGE + ".RecordService";
-    private static final String RECORD_ACTION = "com.dezudio.android.controlsevaluation.action.RECORD";
+    private static final String RECORD_ACTION = "com.dezudio.android.controlsevaluation.action.CONTROLS";
 
 
     /**
@@ -96,7 +97,8 @@ public class ListenerService extends WearableListenerService implements
                 i.putExtra(TIMESTAMP_KEY, dataMap.getString(TIMESTAMP_KEY));
                 i.putExtra(TIMESTAMP_WAS_CANCELLED_KEY,
                         dataMap.getBoolean(TIMESTAMP_WAS_CANCELLED_KEY));
-                startService(i);
+                //startService(i);
+                sendBroadcast(i);
 
                 i.setClassName(LAB_APP_PACKAGE, LAB_APP_SERVICE);
                 startService(i);

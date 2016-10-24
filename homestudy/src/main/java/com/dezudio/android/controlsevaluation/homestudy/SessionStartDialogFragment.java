@@ -13,8 +13,6 @@ import android.support.v7.app.AlertDialog;
 import java.util.Date;
 
 public class SessionStartDialogFragment extends DialogFragment {
-    private static final String START_INTENT =
-            "com.dezudio.android.controlsevaluation.homestudy.START";
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -23,8 +21,10 @@ public class SessionStartDialogFragment extends DialogFragment {
         builder.setMessage(R.string.start_confirmation_instructions)
                 .setPositiveButton(R.string.start_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
+
                         Intent sendIntent = new Intent();
-                        sendIntent.setAction(START_INTENT);
+                        sendIntent.setAction(MainActivity.START_SESSION_ACTION);
                         startActivity(sendIntent);
 
                     }

@@ -8,7 +8,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/power_hour_button"
-        android:onClick="beginPowerHour" />
+        android:onClick="beginPowerHour"
+        android:visibility="visible" />
 
     <TextView
         android:text=""

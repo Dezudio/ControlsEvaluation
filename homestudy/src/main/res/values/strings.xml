@@ -11,6 +11,8 @@
     <string name="start_instructions">Each session lasts 12 hours and cannot be paused.</string>
     <string name="start_daily">Begin Session</string>
     <string name="start_confirmation_instructions">Begin session?</string>
+    <string name="end_instructions">Thank you for your participation. You will have an opportunity
+    for another session in 3 hours.</string>
 
     <!-- Power Hour -->
     <string name="power_start_instructions">This is gonna buzz you. Like, a lot.</string>
@@ -23,10 +25,12 @@
     </string>
 
     <string name="study_mode">study_mode</string>
-    <string name="study_mode_default">inactive</string>
     <string name="study_start_time">study_start_time</string>
 
     <string name="power_mode">power_mode</string>
-    <string name="power_mode_default">inactive</string>
     <string name="power_start_time">power_start_time</string>
+
+    <string name="mode_inactive">inactive</string>
+    <string name="mode_active">active</string>
+    <string name="mode_cool_down">cool_down</string>
 </resources>
