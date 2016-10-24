@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private CountDownTimer timer;
     private CountDownTimer powerTimer;
     private  ArrayAdapter<String> adapter;
+    public static FileWriter writer;
+    public static File outputFile;
 
     @Override
     protected void onStart() {
@@ -145,12 +154,50 @@ public class MainActivity extends AppCompatActivity {
         editor.putLong(getString(R.string.study_start_time),System.currentTimeMillis());
         editor.apply();
 
+        try
+        {
+           File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"ControlsStudy");
+            if (!root.exists()) {
+                root.mkdirs();
+            }
+            outputFile = new File(root, "log.txt");
+            outputFile.createNewFile();
+            writer = new FileWriter(outputFile);
+            writer.append("== LOG ==");
+            writer.flush();
+            writer.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
         // Set an initial alert to kickstart the rest; will not notify
         long delayMins = AlarmReceiver.alertList[0];
         boolean isPowerHour = false;
         int alarmIndex = 0;
         int powerHourAlarmIndex=0;
         AlarmReceiver.setAlarm(this,delayMins*60,isPowerHour,powerHourAlarmIndex,alarmIndex);
+    }
+
+    private void fileDump() {
+        try {
+           File root = new File(Environment.getExternalStoragePublicDirectory(
+                   Environment.DIRECTORY_DOCUMENTS),"ControlsStudy");
+            if (!root.exists()) {
+                root.mkdirs();
+            }
+            outputFile = new File(root, "log-" + System.currentTimeMillis() + ".txt");
+            outputFile.createNewFile();
+            writer = new FileWriter(outputFile);
+            writer.append(ControlsReceiver.invocations.toString());
+            writer.flush();
+            writer.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void handleUpdate(Intent intent, SharedPreferences sharedPref) {
@@ -171,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 Button mButton = (Button) findViewById(R.id.power_hour_button);
                 mButton.setVisibility(Button.GONE);
             }
+            fileDump();
         }
         else {
             Log.d(TAG, "Control received out of session");
@@ -210,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString(getString(R.string.power_mode), inactive);
             editor.putLong(getString(R.string.power_start_time), 0);
             editor.putLong(getString(R.string.study_start_time), 0);
+            ControlsReceiver.invocations = new ArrayList();
             editor.apply();
         }
         else {
