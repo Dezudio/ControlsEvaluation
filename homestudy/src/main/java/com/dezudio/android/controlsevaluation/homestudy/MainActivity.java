@@ -1,5 +1,6 @@
 package com.dezudio.android.controlsevaluation.homestudy;
 
+import android.Manifest;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeStudy";
+
+    private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1;
 
     public static final String START_SESSION_ACTION =
             "com.dezudio.android.controlsevaluation.action.START_SESSION";
@@ -114,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        doPermissionRequest();
 
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -289,4 +294,12 @@ public class MainActivity extends AppCompatActivity {
         dialog.show(getFragmentManager(),"MainActivity");
     }
 
+
+    private void doPermissionRequest() {
+
+        requestPermissions(new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
+
+    }
 }
