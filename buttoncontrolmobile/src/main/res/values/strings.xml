@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Button Control: Mobile</string>
+    <string name="device_address">Device Address</string>
+    <string name="unknown_device">No Name</string>
+    <string name="connected">Button Connected</string>
+    <string name="disconnected">Button Disconnected</string>
+    <string name="label_device_address">Button Address</string>
+    <string name="label_state">State:</string>
+    <string name="label_data">Press Count</string>
+    <string name="no_data">Nothing yet....</string>
+    <string name="unknown_characteristic">Unknown Characteristic</string>
+    <string name="unknown_service">Unknown Service</string>
 </resources>
