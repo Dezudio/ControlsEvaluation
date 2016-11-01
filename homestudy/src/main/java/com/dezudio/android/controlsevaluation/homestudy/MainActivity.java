@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
        if(studyMode.equals(active)) {
             long timerMillis = 12 * 60 * 60 * 1000 - (System.currentTimeMillis() - startTime);
-            if (timerMillis > 0) {
+            //if (timerMillis > 0) {
                 timer = new CountDownTimer(timerMillis, 1000 * 60) {
 
                     // Update the text view once/minute
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                         TextView mTextField = (TextView) findViewById(R.id.session_countdown);
                         if (mTextField != null) {
                             mTextField.setText("Session Active! " +
-                                    millisUntilFinished / 1000 / 60 + " min left");
+                                    Math.ceil(millisUntilFinished / 1000 / 60) + " min left");
                         }
                     }
 
@@ -82,31 +82,37 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }.start(); // start the session countdown timer
-            }
+            //}
         }
 
         if(powerMode.equals(active)) {
             long timerMillisPower = 30 * 60 * 1000 - (System.currentTimeMillis() - powerStartTime);
-            if (timerMillisPower > 0) {
+            //if (timerMillisPower > 0) {
                 powerTimer = new CountDownTimer(timerMillisPower, 1000 * 60) {
 
                     // Update the text view once/minute
                     public void onTick(long millisUntilFinished) {
                         TextView mTextField = (TextView) findViewById(R.id.power_hour_countdown);
                         if (mTextField != null) {
+                            Log.d(TAG,"HI");
                             mTextField.setText("Power 30! " +
-                                    millisUntilFinished / 1000 / 60 + " min left");
+                                    Math.ceil(millisUntilFinished / 1000 / 60) + " min left");
                         }
                     }
 
                     // Display a message when there is no time remaining
                     public void onFinish() {
+                        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                        String inactive = getResources().getString(R.string.mode_inactive);
                         TextView mTextField = (TextView) findViewById(R.id.power_hour_countdown);
-                        mTextField.setText("Powered!");
+                        mTextField.setText("Power Hour Up!");
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString(getString(R.string.study_mode), inactive);
+                        editor.putString(getString(R.string.power_mode), inactive);
                     }
 
                 }.start(); // start the session countdown timer
-            }
+           // }
         }
     }
 
@@ -222,6 +228,10 @@ public class MainActivity extends AppCompatActivity {
             if(powerMode.equals(active)) {
                 Button mButton = (Button) findViewById(R.id.power_hour_button);
                 mButton.setVisibility(Button.GONE);
+                TextView mTextField = (TextView) findViewById(R.id.power_hour_countdown);
+                if (mTextField != null) {
+                    mTextField.setText("Power Half Hour Mode!");
+                }
             }
             fileDump();
         }
